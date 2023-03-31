@@ -31,48 +31,19 @@ int main()
 	sf::Time previousTime = clock.getElapsedTime();
 	sf::Clock bulletClock;
 	sf::Clock minion;
-
-	sf::Texture min0;
-	sf::Texture min1;
-	sf::Texture min2;
-	sf::Texture min3;
-	sf::Texture min4;
-	sf::Texture min5;
-	sf::Texture min6;
-	sf::Texture min7;
-	sf::Texture min8;
-	sf::Texture min9;
-	sf::Texture min10;
-	sf::Texture min11;
-	sf::Texture min12;
-	sf::Texture min13;
-
 	bulTex.loadFromFile("content/ban.png");
-	bobtex.loadFromFile("content/minion/min.png");
+	bobtex.loadFromFile("content/minion/min0.png");
 	smallTex.loadFromFile("content/small_asteroid.png");
 	mediumTex.loadFromFile("content/medium_asteroid.png");
 	largeTex.loadFromFile("content/large_asteroid.png");
-	min0.loadFromFile("content/minion/min0.png");
-	min1.loadFromFile("content/minion/min1.png");
-	min2.loadFromFile("content/minion/min2.png");
-	min3.loadFromFile("content/minion/min3.png");
-	min4.loadFromFile("content/minion/min4.png");
-	min5.loadFromFile("content/minion/min5.png");
-	min6.loadFromFile("content/minion/min6.png");
-	min7.loadFromFile("content/minion/min7.png");
-	min8.loadFromFile("content/minion/min8.png");
-	min9.loadFromFile("content/minion/min9.png");
-	min10.loadFromFile("content/minion/min10.png");
-	min11.loadFromFile("content/minion/min11.png");
-	min12.loadFromFile("content/minion/min12.png");
-	min13.loadFromFile("content/minion/min13.png");
-	Bob bob(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), min0, 300.0f, 300.0f); //created instance of bob, size 200, placed in the center, and with texture bobtex
-
-	vector<sf::Texture> min = {min0,min1,min2,min3,min4,min5,min6,min7,min8,min9,min10,min11,min12,min13};
-
-	//window.setFramerateLimit(60);
-
-
+	vector<sf::Texture> min;
+    for(int i = 0; i<14; i++){
+        string filename = "content/minion/min" + to_string(i)+ ".png";
+        sf::Texture minion;
+        minion.loadFromFile(filename);
+        min.push_back(minion);
+    }
+	Bob bob(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), min[0], 300.0f, 300.0f); //created instance of bob, size 200, placed in the center, and with texture bobtex
 	int textureIndex = 0;
 
 	while (window.isOpen())
@@ -232,45 +203,14 @@ int main()
 
 		if(textureIndex < 14){
 			bob.setTexture(min[textureIndex]);
-			/*if(textureIndex == 1){
-				bob.setTexture(min1);
-			}else if(textureIndex == 2){
-				bob.setTexture(min2);
-			}else if(textureIndex == 3){
-				bob.setTexture(min3);
-			}else if(textureIndex == 4){
-				bob.setTexture(min4);
-			}else if(textureIndex == 5){
-				bob.setTexture(min5);
-			}else if(textureIndex == 6){
-				bob.setTexture(min6);
-			}else if(textureIndex == 7){
-				bob.setTexture(min7);
-			}else if(textureIndex == 8){
-				bob.setTexture(min8);
-			}else if(textureIndex == 9){
-				bob.setTexture(min9);
-			}else if(textureIndex == 10){
-				bob.setTexture(min10);
-			}else if(textureIndex == 11){
-				bob.setTexture(min11);
-			}else if(textureIndex == 12){
-				bob.setTexture(min12);
-			}else if(textureIndex == 13){
-				bob.setTexture(min13);
-			}*/
 
-			//bob.draw(window);
 			minion.restart();
 		}else {
 			textureIndex = 0;
 		}
 		}
 		bob.draw(window);
-
 		window.display();
-
-
 	}
 	return 0;
 }
