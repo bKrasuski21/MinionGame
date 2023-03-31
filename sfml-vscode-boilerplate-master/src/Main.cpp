@@ -26,12 +26,7 @@ int main()
 	sf::Texture mediumTex;
 	sf::Texture largeTex;
 	srand((unsigned)time(NULL));
-	bulTex.loadFromFile("content/ban.png");
-	bobtex.loadFromFile("content/min.png");
-	smallTex.loadFromFile("content/small_asteroid.png");
-	mediumTex.loadFromFile("content/medium_asteroid.png");
-	largeTex.loadFromFile("content/large_asteroid.png");
-	Bob bob(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), bobtex, 300.0f, 300.0f); //created instance of bob, size 200, placed in the center, and with texture bobtex
+
 	sf::Clock clock;
 	sf::Time previousTime = clock.getElapsedTime();
 	sf::Clock bulletClock;
@@ -52,7 +47,11 @@ int main()
 	sf::Texture min12;
 	sf::Texture min13;
 
-
+	bulTex.loadFromFile("content/ban.png");
+	bobtex.loadFromFile("content/minion/min.png");
+	smallTex.loadFromFile("content/small_asteroid.png");
+	mediumTex.loadFromFile("content/medium_asteroid.png");
+	largeTex.loadFromFile("content/large_asteroid.png");
 	min0.loadFromFile("content/minion/min0.png");
 	min1.loadFromFile("content/minion/min1.png");
 	min2.loadFromFile("content/minion/min2.png");
@@ -67,6 +66,8 @@ int main()
 	min11.loadFromFile("content/minion/min11.png");
 	min12.loadFromFile("content/minion/min12.png");
 	min13.loadFromFile("content/minion/min13.png");
+	Bob bob(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), min0, 300.0f, 300.0f); //created instance of bob, size 200, placed in the center, and with texture bobtex
+
 	vector<sf::Texture> min = {min0,min1,min2,min3,min4,min5,min6,min7,min8,min9,min10,min11,min12,min13};
 
 	//window.setFramerateLimit(60);
@@ -225,11 +226,44 @@ int main()
 			bullet->draw(window);
 			bullet->move(deltaTime.asSeconds());
 		}
-		if(minionTime.asSeconds() > .5f){
+		if(minionTime.asSeconds() > .2f){
+			cout << textureIndex << endl;
 			textureIndex++;
 
 		if(textureIndex < 14){
 			bob.setTexture(min[textureIndex]);
+			/*if(textureIndex == 1){
+				bob.setTexture(min1);
+			}else if(textureIndex == 2){
+				bob.setTexture(min2);
+			}else if(textureIndex == 3){
+				bob.setTexture(min3);
+			}else if(textureIndex == 4){
+				bob.setTexture(min4);
+			}else if(textureIndex == 5){
+				bob.setTexture(min5);
+			}else if(textureIndex == 6){
+				bob.setTexture(min6);
+			}else if(textureIndex == 7){
+				bob.setTexture(min7);
+			}else if(textureIndex == 8){
+				bob.setTexture(min8);
+			}else if(textureIndex == 9){
+				bob.setTexture(min9);
+			}else if(textureIndex == 10){
+				bob.setTexture(min10);
+			}else if(textureIndex == 11){
+				bob.setTexture(min11);
+			}else if(textureIndex == 12){
+				bob.setTexture(min12);
+			}else if(textureIndex == 13){
+				bob.setTexture(min13);
+			}*/
+
+			//bob.draw(window);
+			minion.restart();
+		}else {
+			textureIndex = 0;
 		}
 		}
 		bob.draw(window);
