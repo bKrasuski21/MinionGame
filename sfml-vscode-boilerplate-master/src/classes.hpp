@@ -17,6 +17,7 @@ public:
 	void update(float time);
 	void setBoost(bool truth);
 	void setPos();
+	void setTexture(sf::Texture &texture);
 
 private:
 	sf::RectangleShape m_shape;
@@ -50,16 +51,21 @@ class Asteroid
 {
 public:
 	Asteroid(sf::Vector2f position, sf::Texture& smallTex, sf::Texture& mediumTex, sf::Texture& largeTex, float movVel, int asteroidSize);
-	float getSize() {return asteroidSize;};
+	float getSize()
+	{
+		return asteroidSize;
+	};
 	float getMovVel() const;
 	sf::Vector2f getPosition() const;
 	void move(float time);
 	void setRotation();
 	void draw(sf::RenderWindow& window);
 	void update(float time, sf::RenderWindow& window);
+	int getInt();
+	void setPosition(sf::Vector2f position);
 
 private:
-	sf::RectangleShape m_shape;
+	sf::CircleShape m_shape;
 	float m_movVel;
 	int asteroidSize;
 	sf::Texture small;

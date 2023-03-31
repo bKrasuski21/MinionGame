@@ -20,7 +20,9 @@ Bob::Bob(sf::Vector2f size, sf::Vector2f position, sf::Texture& texture, float r
 	m_shape.setTexture(&texture);
 	m_shape.setOrigin((m_shape.getSize().x / 2.0f), (m_shape.getSize().y / 2.0f));
 }
-
+void Bob::setTexture(sf::Texture &texture){
+	m_shape.setTexture(&texture);
+}
 void Bob::setBoost(bool truth)
 {
 	boosting = truth;
@@ -173,30 +175,31 @@ Asteroid::Asteroid(sf::Vector2f position, sf::Texture& smallTex, sf::Texture& me
 	this->asteroidSize = asteroidSize;
 	this->m_movVel = movVel;
 
-	m_shape.setSize(sf::Vector2f(65 * asteroidSize, 65 * asteroidSize));
-
 	m_shape.setPosition(position);
 
 	if (asteroidSize == 1)
 	{
-
+		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&smallTex);
 	}
 	if (asteroidSize == 2)
 	{
-
+		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&mediumTex);
 	}
 	if (asteroidSize == 3)
 	{
-
+		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&largeTex);
 	}
 
-	m_shape.setOrigin((m_shape.getSize().x / 2.0f), (m_shape.getSize().y / 2.0f));
+	m_shape.setOrigin(m_shape.getRadius() ,m_shape.getRadius());
 	setRotation(); //sets the rotation to a random value
 }
-
+void Asteroid::setPosition(sf::Vector2f position)
+{
+	m_shape.setPosition(position);
+}
 sf::Vector2f Asteroid::getPosition() const
 {
 	return m_shape.getPosition();
@@ -204,6 +207,10 @@ sf::Vector2f Asteroid::getPosition() const
 float Asteroid::getMovVel() const
 {
 	return m_movVel;
+}
+int Asteroid::getInt()
+{
+	return asteroidSize;
 }
 void Asteroid::setRotation()
 {
@@ -222,6 +229,31 @@ void Asteroid::move(float time)
 	double newX = sin(rot);
 	double newY = -cos(rot);
 	m_shape.move(time * m_movVel * newX, time * m_movVel * newY);
+	if (m_shape.getPosition().x > 2550.0f)
+	{
+
+		float y = m_shape.getPosition().y;
+		m_shape.setPosition(0.0f, y);
+	}
+
+	if (m_shape.getPosition().y > 1800.0f)
+	{
+		float x = m_shape.getPosition().x;
+
+		m_shape.setPosition(x, 0.0f);
+	}
+	if (m_shape.getPosition().x < -50.0f)
+	{
+
+		float y = m_shape.getPosition().y;
+		m_shape.setPosition(2550.0f, y);
+	}
+	if (m_shape.getPosition().y < -50.0f)
+	{
+		float x = m_shape.getPosition().x;
+
+		m_shape.setPosition(x, 1800.0f);
+	}
 }
 
 void Asteroid::draw(sf::RenderWindow& window)
