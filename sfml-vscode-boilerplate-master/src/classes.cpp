@@ -20,7 +20,7 @@ Bob::Bob(sf::Vector2f size, sf::Vector2f position, sf::Texture& texture, float r
 	m_shape.setTexture(&texture);
 	m_shape.setOrigin((m_shape.getSize().x / 2.0f), (m_shape.getSize().y / 2.0f));
 }
-void Bob::setTexture(sf::Texture &texture){
+void Bob::setTexture(sf::Texture& texture){
 	m_shape.setTexture(&texture);
 }
 void Bob::setBoost(bool truth)

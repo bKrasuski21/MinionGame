@@ -22,55 +22,32 @@ int main()
 	float height = window.getSize().y;
 	sf::Texture bobtex;
 	sf::Texture bulTex;
-	sf::Texture smallTex;
+	sf::Texture smallTex; //test comment
 	sf::Texture mediumTex;
 	sf::Texture largeTex;
 	srand((unsigned)time(NULL));
 	bulTex.loadFromFile("content/ban.png");
-	bobtex.loadFromFile("content/min.png");
+	bobtex.loadFromFile("content/minion/cum0.png");
 	smallTex.loadFromFile("content/small_asteroid.png");
 	mediumTex.loadFromFile("content/medium_asteroid.png");
 	largeTex.loadFromFile("content/large_asteroid.png");
-	Bob bob(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), bobtex, 300.0f, 300.0f); //created instance of bob, size 200, placed in the center, and with texture bobtex
+	Bob bob(sf::Vector2f(500.0f, 500.0f), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), bobtex, 300.0f, 300.0f); //created instance of bob, size 200, placed in the center, and with texture bobtex
 	sf::Clock clock;
 	sf::Time previousTime = clock.getElapsedTime();
 	sf::Clock bulletClock;
 	sf::Clock minion;
-
-	sf::Texture min0;
-	sf::Texture min1;
-	sf::Texture min2;
-	sf::Texture min3;
-	sf::Texture min4;
-	sf::Texture min5;
-	sf::Texture min6;
-	sf::Texture min7;
-	sf::Texture min8;
-	sf::Texture min9;
-	sf::Texture min10;
-	sf::Texture min11;
-	sf::Texture min12;
-	sf::Texture min13;
+	vector<sf::Texture> min; //change
 
 
-	min0.loadFromFile("content/minion/min0.png");
-	min1.loadFromFile("content/minion/min1.png");
-	min2.loadFromFile("content/minion/min2.png");
-	min3.loadFromFile("content/minion/min3.png");
-	min4.loadFromFile("content/minion/min4.png");
-	min5.loadFromFile("content/minion/min5.png");
-	min6.loadFromFile("content/minion/min6.png");
-	min7.loadFromFile("content/minion/min7.png");
-	min8.loadFromFile("content/minion/min8.png");
-	min9.loadFromFile("content/minion/min9.png");
-	min10.loadFromFile("content/minion/min10.png");
-	min11.loadFromFile("content/minion/min11.png");
-	min12.loadFromFile("content/minion/min12.png");
-	min13.loadFromFile("content/minion/min13.png");
-	vector<sf::Texture> min = {min0,min1,min2,min3,min4,min5,min6,min7,min8,min9,min10,min11,min12,min13};
+	for(int i = 0; i<55; i++){
+		string filename = "content/minion/cum" + to_string(i)+ ".png";
+		sf::Texture minion;
+		minion.loadFromFile(filename);
+		min.push_back(minion);
+	}
+
 
 	//window.setFramerateLimit(60);
-
 
 	int textureIndex = 0;
 
@@ -99,7 +76,6 @@ int main()
 		sf::Time deltaTime = currentTime - previousTime; //time elapsed in one frame
 		sf::Time bulletTime = bulletClock.getElapsedTime();
 		sf::Time minionTime = minion.getElapsedTime();
-
 
 		previousTime = currentTime;
 
@@ -225,18 +201,25 @@ int main()
 			bullet->draw(window);
 			bullet->move(deltaTime.asSeconds());
 		}
-		if(minionTime.asSeconds() > .5f){
+
+		if (minionTime.asSeconds() > .1f)
+		{
 			textureIndex++;
 
-		if(textureIndex < 14){
-			bob.setTexture(min[textureIndex]);
+			if (textureIndex < 55)
+			{
+				bob.setTexture(min[textureIndex]);
+				minion.restart();
+			}
+			else{
+				textureIndex = 0;
+			}
 		}
-		}
+
+
 		bob.draw(window);
 
 		window.display();
-
-
 	}
 	return 0;
 }
