@@ -15,7 +15,7 @@ int main()
 	//const double PI = 3.1415928;
 	vector<Bullet*> bullets;
 	vector<Asteroid*> astVec;
-	int numOfAsteroids = 5;
+	int numOfAsteroids = 7;
 	int asteroidsOut = 0;
 	sf::RenderWindow window(sf::VideoMode(2500, 2000), "sped game", sf::Style::Default); //default style
 	float width = window.getSize().x;
@@ -38,17 +38,16 @@ int main()
 	sf::Time previousTime = clock.getElapsedTime();
 	sf::Clock bulletClock;
 	sf::Clock minion;
+	sf::Clock bounce;
 	vector<sf::Texture> min; //change
 
-
-
-	for(int i = 0; i<55; i++){
-		string filename = "content/minion/cum" + to_string(i)+ ".png";
+	for (int i = 0; i < 55; i++)
+	{
+		string filename = "content/minion/cum" + to_string(i) + ".png";
 		sf::Texture minion;
 		minion.loadFromFile(filename);
 		min.push_back(minion);
 	}
-
 
 	//window.setFramerateLimit(60);
 
@@ -79,6 +78,7 @@ int main()
 		sf::Time deltaTime = currentTime - previousTime; //time elapsed in one frame
 		sf::Time bulletTime = bulletClock.getElapsedTime();
 		sf::Time minionTime = minion.getElapsedTime();
+		sf::Time bounceTime = bounce.getElapsedTime();
 
 		previousTime = currentTime;
 
@@ -108,7 +108,7 @@ int main()
 		}
 		bob.update(deltaTime.asSeconds());
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && bulletTime.asSeconds() >= 0.001) //FEATURES TO ADD: ACCELERATION/DECELLERATION????
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && bulletTime.asSeconds() >= 0.4) //FEATURES TO ADD: ACCELERATION/DECELLERATION????
 		{
 			bulletClock.restart();
 			Bullet* bullet = new Bullet(sf::Vector2f(70.0f, 70.0f), bob.getPosition(), bulTex, 5000.0f, bob.getRotation());
@@ -133,40 +133,43 @@ int main()
 		}
 
 		window.clear();
-
 		int i = 0;
-		for (auto iter2 = astVec.begin(); iter2 != astVec.end(); ++iter2)
+		bool beenhit = true;
+		for (auto iter2 = astVec.begin(); iter2 != astVec.end(); iter2++)
 		{
 			Asteroid* roid = *iter2;
-		if (roid->getPosition().x + (28 * roid->getSize()) >= bob.getPosition().x - (125) && roid->getPosition().x - (28 * roid->getSize()) <= bob.getPosition().x + (128)){
-			if (roid->getPosition().y + (28 * roid->getSize()) >= bob.getPosition().y - (125) && roid->getPosition().y - (28 * roid->getSize()) <= bob.getPosition().y + (128)){
+			for (auto iter3 = astVec.begin(); iter3 != astVec.end(); ++iter3)
+			{
+				Asteroid* tempRoid = *iter3;
 
-				float tempAngle = rand() %1000;
-				roid->setNewRotation(tempAngle);
-				bob.setTexture(bulTex);
-				
+				if (*iter2 != *iter3)
+				{
+					//cout << roid->getPosition().x << " " << roid->getPosition().y << endl;
+					if (bounceTime.asSeconds() > 0.5 && beenhit && roid->getPosition().x + (28 * roid->getSize()) >= tempRoid->getPosition().x - (tempRoid->getSize() * 28) && roid->getPosition().x - (28 * roid->getSize()) <= tempRoid->getPosition().x + (tempRoid->getSize() * 28) && (roid->getPosition().y + (28 * roid->getSize()) >= tempRoid->getPosition().y - (tempRoid->getSize() * 28) && roid->getPosition().y - (28 * roid->getSize()) <= tempRoid->getPosition().y + (tempRoid->getSize() * 28)))
+					{
+						beenhit = false;
+						//float temp = tempRoid->getCurRotation();
+						float temp = rand() %1000;
+						tempRoid->setNewRotation(temp);
+						i++;
+						cout << "apple" << i << endl;
+						temp = rand() %1000;
+						roid->setNewRotation(temp);
+						bounce.restart();
+						break;
+					}
+				}
 			}
 		}
 
-			for (auto iter3 = astVec.begin(); iter3 != astVec.end(); ++iter3)
+		for (auto iter2 = astVec.begin(); iter2 != astVec.end(); ++iter2)
 		{
-			Asteroid* tempRoid = *iter3;
-			if(iter2 != iter3 ){
-
-			//cout << roid->getPosition().x << " " << roid->getPosition().y << endl;
-			if (roid->getPosition().x + (28 * roid->getSize()) >= tempRoid->getPosition().x - (tempRoid->getSize() *28) && roid->getPosition().x - (28 * roid->getSize()) <= tempRoid->getPosition().x + (tempRoid->getSize() * 28)){
-				if (roid->getPosition().y + (28 * roid->getSize()) >= tempRoid->getPosition().y - (tempRoid->getSize() *28) && roid->getPosition().y - (28 * roid->getSize()) <= tempRoid->getPosition().y + (tempRoid->getSize() * 28)){
-					//float temp = roid->getCurRotation();
-					i++;
-					float tempAngle = rand() %1000;
-					//float temp = -tempRoid->getCurRotation();
-					tempRoid->setNewRotation(tempAngle);
-					tempAngle = rand() %1000;
-					roid->setNewRotation(tempAngle);
-					break;
-
-						}
-					}
+			Asteroid* roid = *iter2;
+			if (roid->getPosition().x + (28 * roid->getSize()) >= bob.getPosition().x - (125) && roid->getPosition().x - (28 * roid->getSize()) <= bob.getPosition().x + (128))
+			{
+				if (roid->getPosition().y + (28 * roid->getSize()) >= bob.getPosition().y - (125) && roid->getPosition().y - (28 * roid->getSize()) <= bob.getPosition().y + (128))
+				{
+					//cout << "miniom has been hit" << endl;
 				}
 			}
 
@@ -174,70 +177,73 @@ int main()
 
 			for (auto iter = bullets.begin(); iter != bullets.end(); ++iter)
 			{
-    			Bullet* bullet = *iter; //sets bullet = to the object pointed to by ite
-				if(bullet == nullptr){
+				Bullet* bullet = *iter; //sets bullet = to the object pointed to by ite
+				if (bullet == nullptr)
+				{
 					cout << "what" << endl;
 				}
-				if (roid == nullptr){
+				if (roid == nullptr)
+				{
 					cout << "rpid " << endl;
 				}
-				if(bullet != nullptr && roid != nullptr){
-				if (bullet->getPosition().x > width || bullet->getPosition().x < 0.0f || bullet->getPosition().y > height || bullet->getPosition().y < 0.0f)
+				if (bullet != nullptr && roid != nullptr)
 				{
-					cout << "step 1" << endl;
-					iter = bullets.erase(iter);
-					delete bullet;
-					//cout << "bullet" << endl;
-					break;
-				}
-				//if (bob.getPosition().x * 125 < roid->getPosition().x + roid->getInt() * 50 && bob.getPosition().x >= roid->getPosition().x - roid->getInt() * 50 && bob.getPosition().y < roid->getPosition().y + roid->getInt() * 50 && bob.getPosition().y >= roid->getPosition().y - roid->getInt() * 50){
-				//	cout << "bob hit" << endl;
-				//}
-				if (bullet->getPosition().x < roid->getPosition().x + (roid->getSize() *50) && bullet->getPosition().x >= roid->getPosition().x - (roid->getSize() * 50) && bullet->getPosition().y < roid->getPosition().y + (roid->getSize() * 50)&& bullet->getPosition().y >= roid->getPosition().y - (roid->getSize() * 50))
-				{
-					cout << "step 3" << endl;
-					float xCord = roid->getPosition().x;
-					float yCord = roid->getPosition().y;
-					int sizer = roid->getSize();
-
-					if(bullet != nullptr){
-						cout << "step 4 " << endl;
-					iter = bullets.erase(iter);
-					delete bullet;
-					}
-
-
-					if(roid != nullptr){
-						///int step = 0;
-					cout << "step 5" << endl;
-					iter2 = astVec.erase(iter2);
-					cout << "after step 5" << endl;
-					delete roid;
-					asteroidDestroyed = true;
-					}
-
-
-					if (sizer == 3)
+					if (bullet->getPosition().x > width || bullet->getPosition().x < 0.0f || bullet->getPosition().y > height || bullet->getPosition().y < 0.0f)
 					{
-						cout << "step 6 " << endl;
-						Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
-						Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
-						astVec.push_back(babyRoid1);
-						astVec.push_back(babyRoid2);
+						cout << "step 1" << endl;
+						iter = bullets.erase(iter);
+						delete bullet;
+						//cout << "bullet" << endl;
+						break;
 					}
-					if (sizer == 2)
+					//if (bob.getPosition().x * 125 < roid->getPosition().x + roid->getInt() * 50 && bob.getPosition().x >= roid->getPosition().x - roid->getInt() * 50 && bob.getPosition().y < roid->getPosition().y + roid->getInt() * 50 && bob.getPosition().y >= roid->getPosition().y - roid->getInt() * 50){
+					//	cout << "bob hit" << endl;
+					//}
+					if (bullet->getPosition().x < roid->getPosition().x + (roid->getSize() * 50) && bullet->getPosition().x >= roid->getPosition().x - (roid->getSize() * 50) && bullet->getPosition().y < roid->getPosition().y + (roid->getSize() * 50) && bullet->getPosition().y >= roid->getPosition().y - (roid->getSize() * 50))
 					{
-						cout << "step 7 " << endl;
-						Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
-						Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
-						astVec.push_back(babyRoid1);
-						astVec.push_back(babyRoid2);
+						cout << "step 3" << endl;
+						float xCord = roid->getPosition().x;
+						float yCord = roid->getPosition().y;
+						int sizer = roid->getSize();
+
+						if (bullet != nullptr)
+						{
+							cout << "step 4 " << endl;
+							iter = bullets.erase(iter);
+							delete bullet;
+						}
+
+						if (roid != nullptr)
+						{
+							///int step = 0;
+							cout << "step 5" << endl;
+							iter2 = astVec.erase(iter2);
+							cout << "after step 5" << endl;
+							delete roid;
+							asteroidDestroyed = true;
+						}
+
+						if (sizer == 3)
+						{
+							cout << "step 6 " << endl;
+							Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
+							Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
+							astVec.push_back(babyRoid1);
+							astVec.push_back(babyRoid2);
+						}
+						if (sizer == 2)
+						{
+							cout << "step 7 " << endl;
+							Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
+							Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
+							astVec.push_back(babyRoid1);
+							astVec.push_back(babyRoid2);
+						}
+
+						break;
+
+						//break;
 					}
-
-					break;
-
-					//break;
-				}
 				}
 			}
 			if (asteroidDestroyed)
@@ -277,11 +283,11 @@ int main()
 				bob.setTexture(min[textureIndex]);
 				minion.restart();
 			}
-			else{
+			else
+			{
 				textureIndex = 0;
 			}
 		}
-
 
 		bob.draw(window);
 
