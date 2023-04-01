@@ -28,7 +28,8 @@
 		".clang-format": "yaml",
 		"ostream": "cpp",
 		"vector": "cpp",
-		"iostream": "cpp"
+		"iostream": "cpp",
+		"iterator": "cpp"
 	},
 	// "terminal.integrated.defaultProfile.windows": "Git Bash",
 	"terminal.integrated.env.windows": {

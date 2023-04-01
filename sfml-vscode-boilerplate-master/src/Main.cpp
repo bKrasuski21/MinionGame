@@ -15,7 +15,7 @@ int main()
 	//const double PI = 3.1415928;
 	vector<Bullet*> bullets;
 	vector<Asteroid*> astVec;
-	int numOfAsteroids = 10;
+	int numOfAsteroids = 5;
 	int asteroidsOut = 0;
 	sf::RenderWindow window(sf::VideoMode(2500, 2000), "sped game", sf::Style::Default); //default style
 	float width = window.getSize().x;
@@ -135,7 +135,7 @@ int main()
 		window.clear();
 		int i = 0;
 		bool beenhit = true;
-		for (auto iter2 = astVec.begin(); iter2 != astVec.end(); iter2++)
+		for (auto iter2 = astVec.begin(); iter2 != astVec.end(); iter2++) //bouncing
 		{
 			Asteroid* roid = *iter2;
 			for (auto iter3 = astVec.begin(); iter3 != astVec.end(); ++iter3)
