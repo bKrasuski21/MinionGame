@@ -38,7 +38,7 @@ int main()
 	sf::Time previousTime = clock.getElapsedTime();
 	sf::Clock bulletClock;
 	sf::Clock minion;
-	//sf::Clock bounce;
+	sf::Clock bounce;
 	vector<sf::Texture> min; //change
 
 	for (int i = 0; i < 55; i++)
@@ -78,7 +78,7 @@ int main()
 		sf::Time deltaTime = currentTime - previousTime; //time elapsed in one frame
 		sf::Time bulletTime = bulletClock.getElapsedTime();
 		sf::Time minionTime = minion.getElapsedTime();
-		//sf::Time bounceTime = bounce.getElapsedTime();
+		sf::Time bounceTime = bounce.getElapsedTime();
 
 		previousTime = currentTime;
 
@@ -108,7 +108,7 @@ int main()
 		}
 		bob.update(deltaTime.asSeconds());
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && bulletTime.asSeconds() >= 0.00001) //FEATURES TO ADD: ACCELERATION/DECELLERATION????
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && bulletTime.asSeconds() >= 0.001) //FEATURES TO ADD: ACCELERATION/DECELLERATION????
 		{
 			bulletClock.restart();
 			Bullet* bullet = new Bullet(sf::Vector2f(70.0f, 70.0f), bob.getPosition(), bulTex, 5000.0f, bob.getRotation());
@@ -133,7 +133,7 @@ int main()
 		}
 
 		window.clear();
-		/*int i = 0;
+		int i = 0;
 		bool beenhit = true;
 		for (auto iter2 = astVec.begin(); iter2 != astVec.end(); iter2++)
 		{
@@ -162,7 +162,7 @@ int main()
 				}
 			}
 		}
-*/
+
 		for (auto iter2 = astVec.begin(); iter2 != astVec.end(); ++iter2)
 		{
 			Asteroid* roid = *iter2;
@@ -216,22 +216,22 @@ int main()
 								delete roid;
 								asteroidDestroyed = true;
 
-							if (sizer == 3)
-							{
-								cout << "step 6 " << endl;
-								Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
-								Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
-								astVec.push_back(babyRoid1);
-								astVec.push_back(babyRoid2);
-							}
-							if (sizer == 2)
-							{
-								cout << "step 7 " << endl;
-								Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
-								Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
-								astVec.push_back(babyRoid1);
-								astVec.push_back(babyRoid2);
-							}
+								if (sizer == 3)
+								{
+									cout << "step 6 " << endl;
+									Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
+									Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
+									astVec.push_back(babyRoid1);
+									astVec.push_back(babyRoid2);
+								}
+								if (sizer == 2)
+								{
+									cout << "step 7 " << endl;
+									Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
+									Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
+									astVec.push_back(babyRoid1);
+									astVec.push_back(babyRoid2);
+								}
 							}
 
 							break;
