@@ -173,7 +173,7 @@ Asteroid::Asteroid(sf::Vector2f position, sf::Texture& smallTex, sf::Texture& me
 //m_movVel(movVel)
 {
 	this->asteroidSize = asteroidSize;
-	this->m_movVel = movVel;
+	this->m_movVel = movVel / asteroidSize;
 
 	m_shape.setPosition(position);
 
@@ -186,14 +186,19 @@ Asteroid::Asteroid(sf::Vector2f position, sf::Texture& smallTex, sf::Texture& me
 	{
 		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&mediumTex);
+				//m_shape.setTexture(&smallTex);
+
 	}
 	if (asteroidSize == 3)
 	{
 		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&largeTex);
+
 	}
 
-	m_shape.setOrigin(m_shape.getRadius() ,m_shape.getRadius());
+
+	m_shape.setOrigin(50*asteroidSize , 50*asteroidSize);
+	//cout << "asteroid spawned in at " << position.x << " " << position.y << endl;
 	setRotation(); //sets the rotation to a random value
 }
 void Asteroid::setPosition(sf::Vector2f position)
@@ -208,19 +213,26 @@ float Asteroid::getMovVel() const
 {
 	return m_movVel;
 }
-int Asteroid::getInt()
-{
-	return asteroidSize;
-}
+
 void Asteroid::setRotation()
 {
 
-	// Generate random angle between 0 and 360 degrees
+	//Generate random angle between 0 and 360 degrees
 	float angle = rand() % 361;
 	angle = angle * (180.0f / 3.14159265358979f);
+	this->AsteroidRotation = angle;
 	m_shape.setRotation(angle);
 }
-
+void Asteroid::setNewRotation(float x)
+{
+	this->m_shape.setRotation(x);
+}
+void Asteroid::setTexture(sf::Texture& texture){
+	m_shape.setTexture(&texture);
+}
+float Asteroid::getCurRotation(){
+	return AsteroidRotation;
+}
 void Asteroid::move(float time)
 {
 
@@ -265,5 +277,6 @@ void Asteroid::update(float time, sf::RenderWindow& window)
 {
 	draw(window);
 	move(time);
+	//cout << time << endl;
 	//cout << time << endl;
 }

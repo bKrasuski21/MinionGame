@@ -15,7 +15,7 @@ int main()
 	//const double PI = 3.1415928;
 	vector<Bullet*> bullets;
 	vector<Asteroid*> astVec;
-	int numOfAsteroids = 10;
+	int numOfAsteroids = 5;
 	int asteroidsOut = 0;
 	sf::RenderWindow window(sf::VideoMode(2500, 2000), "sped game", sf::Style::Default); //default style
 	float width = window.getSize().x;
@@ -25,18 +25,21 @@ int main()
 	sf::Texture smallTex; //test comment
 	sf::Texture mediumTex;
 	sf::Texture largeTex;
+	sf::Texture damageTex;
 	srand((unsigned)time(NULL));
 	bulTex.loadFromFile("content/ban.png");
 	bobtex.loadFromFile("content/minion/cum0.png");
 	smallTex.loadFromFile("content/small_asteroid.png");
 	mediumTex.loadFromFile("content/medium_asteroid.png");
 	largeTex.loadFromFile("content/large_asteroid.png");
-	Bob bob(sf::Vector2f(500.0f, 500.0f), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), bobtex, 300.0f, 300.0f); //created instance of bob, size 200, placed in the center, and with texture bobtex
+	damageTex.loadFromFile("content/minion/pink.png");
+	Bob bob(sf::Vector2f(250.0f, 250.0f), sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2), bobtex, 300.0f, 300.0f); //created instance of bob, size 200, placed in the center, and with texture bobtex
 	sf::Clock clock;
 	sf::Time previousTime = clock.getElapsedTime();
 	sf::Clock bulletClock;
 	sf::Clock minion;
 	vector<sf::Texture> min; //change
+
 
 
 	for(int i = 0; i<55; i++){
@@ -105,7 +108,7 @@ int main()
 		}
 		bob.update(deltaTime.asSeconds());
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && bulletTime.asSeconds() >= .3) //FEATURES TO ADD: ACCELERATION/DECELLERATION????
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space) && bulletTime.asSeconds() >= 0.001) //FEATURES TO ADD: ACCELERATION/DECELLERATION????
 		{
 			bulletClock.restart();
 			Bullet* bullet = new Bullet(sf::Vector2f(70.0f, 70.0f), bob.getPosition(), bulTex, 5000.0f, bob.getRotation());
@@ -119,47 +122,104 @@ int main()
 			{
 				float xCord = rand() % 2500;
 				float yCord = rand() % 1800;
-				//float size = rand() % 3; // will use this as size
-				Asteroid* roid = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 300.0f, 3); // will divide speed by size so size proportional
+
+				//float size = rand() % 4; // will use this as size
+				//cout << size << endl;
+				Asteroid* roid = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 800.0f, 3); // will divide speed by size so size proportional
 				astVec.push_back(roid);
+
 				asteroidsOut = i;
 			}
 		}
 
 		window.clear();
 
+		int i = 0;
 		for (auto iter2 = astVec.begin(); iter2 != astVec.end(); ++iter2)
 		{
 			Asteroid* roid = *iter2;
+		if (roid->getPosition().x + (28 * roid->getSize()) >= bob.getPosition().x - (125) && roid->getPosition().x - (28 * roid->getSize()) <= bob.getPosition().x + (128)){
+			if (roid->getPosition().y + (28 * roid->getSize()) >= bob.getPosition().y - (125) && roid->getPosition().y - (28 * roid->getSize()) <= bob.getPosition().y + (128)){
+
+				float tempAngle = rand() %1000;
+				roid->setNewRotation(tempAngle);
+				bob.setTexture(bulTex);
+				
+			}
+		}
+
+			for (auto iter3 = astVec.begin(); iter3 != astVec.end(); ++iter3)
+		{
+			Asteroid* tempRoid = *iter3;
+			if(iter2 != iter3 ){
+
+			//cout << roid->getPosition().x << " " << roid->getPosition().y << endl;
+			if (roid->getPosition().x + (28 * roid->getSize()) >= tempRoid->getPosition().x - (tempRoid->getSize() *28) && roid->getPosition().x - (28 * roid->getSize()) <= tempRoid->getPosition().x + (tempRoid->getSize() * 28)){
+				if (roid->getPosition().y + (28 * roid->getSize()) >= tempRoid->getPosition().y - (tempRoid->getSize() *28) && roid->getPosition().y - (28 * roid->getSize()) <= tempRoid->getPosition().y + (tempRoid->getSize() * 28)){
+					//float temp = roid->getCurRotation();
+					i++;
+					float tempAngle = rand() %1000;
+					//float temp = -tempRoid->getCurRotation();
+					tempRoid->setNewRotation(tempAngle);
+					tempAngle = rand() %1000;
+					roid->setNewRotation(tempAngle);
+					break;
+
+						}
+					}
+				}
+			}
+
 			bool asteroidDestroyed = false;
+
 			for (auto iter = bullets.begin(); iter != bullets.end(); ++iter)
 			{
-
-				Bullet* bullet = *iter; //sets bullet = to the object pointed to by ite
+    			Bullet* bullet = *iter; //sets bullet = to the object pointed to by ite
+				if(bullet == nullptr){
+					cout << "what" << endl;
+				}
+				if (roid == nullptr){
+					cout << "rpid " << endl;
+				}
+				if(bullet != nullptr && roid != nullptr){
 				if (bullet->getPosition().x > width || bullet->getPosition().x < 0.0f || bullet->getPosition().y > height || bullet->getPosition().y < 0.0f)
 				{
+					cout << "step 1" << endl;
 					iter = bullets.erase(iter);
 					delete bullet;
 					//cout << "bullet" << endl;
 					break;
 				}
-
-				if (bullet->getPosition().x < roid->getPosition().x + roid->getInt() * 50 && bullet->getPosition().x >= roid->getPosition().x - roid->getInt() * 50 && bullet->getPosition().y < roid->getPosition().y + roid->getInt() * 50 && bullet->getPosition().y >= roid->getPosition().y - roid->getInt() * 50)
+				//if (bob.getPosition().x * 125 < roid->getPosition().x + roid->getInt() * 50 && bob.getPosition().x >= roid->getPosition().x - roid->getInt() * 50 && bob.getPosition().y < roid->getPosition().y + roid->getInt() * 50 && bob.getPosition().y >= roid->getPosition().y - roid->getInt() * 50){
+				//	cout << "bob hit" << endl;
+				//}
+				if (bullet->getPosition().x < roid->getPosition().x + (roid->getSize() *50) && bullet->getPosition().x >= roid->getPosition().x - (roid->getSize() * 50) && bullet->getPosition().y < roid->getPosition().y + (roid->getSize() * 50)&& bullet->getPosition().y >= roid->getPosition().y - (roid->getSize() * 50))
 				{
-
+					cout << "step 3" << endl;
 					float xCord = roid->getPosition().x;
 					float yCord = roid->getPosition().y;
+					int sizer = roid->getSize();
 
-					int sizer = roid->getInt();
+					if(bullet != nullptr){
+						cout << "step 4 " << endl;
 					iter = bullets.erase(iter);
 					delete bullet;
+					}
 
-					iter2 = astVec.erase(iter2); //this line caused crash. WHY BRUH
+
+					if(roid != nullptr){
+						///int step = 0;
+					cout << "step 5" << endl;
+					iter2 = astVec.erase(iter2);
+					cout << "after step 5" << endl;
 					delete roid;
 					asteroidDestroyed = true;
+					}
+
 
 					if (sizer == 3)
 					{
+						cout << "step 6 " << endl;
 						Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
 						Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 400.0f, 2); // will divide speed by size so size proportional
 						astVec.push_back(babyRoid1);
@@ -167,6 +227,7 @@ int main()
 					}
 					if (sizer == 2)
 					{
+						cout << "step 7 " << endl;
 						Asteroid* babyRoid1 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
 						Asteroid* babyRoid2 = new Asteroid(sf::Vector2f(xCord, yCord), smallTex, mediumTex, largeTex, 700.0f, 1); // will divide speed by size so size proportional
 						astVec.push_back(babyRoid1);
@@ -177,16 +238,21 @@ int main()
 
 					//break;
 				}
+				}
 			}
 			if (asteroidDestroyed)
 			{
+				cout << "step 8" << endl;
 				if (iter2 == astVec.end())
 				{
+					cout << "step 9" << endl;
 					break;
 				}
 				else
 				{
+					cout << "step 10" << endl;
 					--iter2;
+					cout << "after step 10" << endl;
 				}
 			}
 		}

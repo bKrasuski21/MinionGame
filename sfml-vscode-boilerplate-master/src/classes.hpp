@@ -55,15 +55,17 @@ public:
 	{
 		return asteroidSize;
 	};
+
 	float getMovVel() const;
 	sf::Vector2f getPosition() const;
 	void move(float time);
 	void setRotation();
 	void draw(sf::RenderWindow& window);
 	void update(float time, sf::RenderWindow& window);
-	int getInt();
 	void setPosition(sf::Vector2f position);
-
+	void setNewRotation(float x);
+	float getCurRotation();
+	void setTexture(sf::Texture& texture);
 private:
 	sf::CircleShape m_shape;
 	float m_movVel;
@@ -71,4 +73,5 @@ private:
 	sf::Texture small;
 	sf::Texture medium;
 	sf::Texture large;
+	float AsteroidRotation;
 };
