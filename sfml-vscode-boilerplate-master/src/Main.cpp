@@ -15,7 +15,7 @@ int main()
 	//const double PI = 3.1415928;
 	vector<Bullet*> bullets;
 	vector<Asteroid*> astVec;
-	int numOfAsteroids = 500;
+	int numOfAsteroids = 5;
 	int asteroidsOut = 0;
 	sf::RenderWindow window(sf::VideoMode(2500, 2000), "sped game", sf::Style::Default); //default style
 	float width = window.getSize().x;
