@@ -20,8 +20,7 @@ Bob::Bob(sf::Vector2f size, sf::Vector2f position, sf::Texture& texture, float r
 	m_shape.setTexture(&texture);
 	m_shape.setOrigin((m_shape.getSize().x / 2.0f), (m_shape.getSize().y / 2.0f));
 }
-void Bob::setTexture(sf::Texture& texture)
-{
+void Bob::setTexture(sf::Texture& texture){
 	m_shape.setTexture(&texture);
 }
 void Bob::setBoost(bool truth)
@@ -180,22 +179,25 @@ Asteroid::Asteroid(sf::Vector2f position, sf::Texture& smallTex, sf::Texture& me
 
 	if (asteroidSize == 1)
 	{
-		m_shape.setRadius(50 * asteroidSize);
+		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&smallTex);
 	}
 	if (asteroidSize == 2)
 	{
-		m_shape.setRadius(50 * asteroidSize);
+		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&mediumTex);
-		//m_shape.setTexture(&smallTex);
+				//m_shape.setTexture(&smallTex);
+
 	}
 	if (asteroidSize == 3)
 	{
-		m_shape.setRadius(50 * asteroidSize);
+		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&largeTex);
+
 	}
 
-	m_shape.setOrigin(50 * asteroidSize, 50 * asteroidSize);
+
+	m_shape.setOrigin(50*asteroidSize , 50*asteroidSize);
 	//cout << "asteroid spawned in at " << position.x << " " << position.y << endl;
 	setRotation(); //sets the rotation to a random value
 }
@@ -225,12 +227,10 @@ void Asteroid::setNewRotation(float x)
 {
 	this->m_shape.setRotation(x);
 }
-void Asteroid::setTexture(sf::Texture& texture)
-{
+void Asteroid::setTexture(sf::Texture& texture){
 	m_shape.setTexture(&texture);
 }
-float Asteroid::getCurRotation()
-{
+float Asteroid::getCurRotation(){
 	return AsteroidRotation;
 }
 void Asteroid::move(float time)
