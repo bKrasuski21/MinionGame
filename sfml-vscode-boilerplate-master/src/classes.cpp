@@ -20,8 +20,7 @@ Bob::Bob(sf::Vector2f size, sf::Vector2f position, sf::Texture& texture, float r
 	m_shape.setPosition(position);
 	m_shape.setTexture(&texture);
 }
-void Bob::setTexture(sf::Texture& texture)
-{
+void Bob::setTexture(sf::Texture& texture){
 	m_shape.setTexture(&texture);
 }
 void Bob::setBoost(bool truth)
@@ -180,21 +179,33 @@ Asteroid::Asteroid(sf::Vector2f position, sf::Texture& smallTex, sf::Texture& me
 
 	if (asteroidSize == 1)
 	{
-		m_shape.setRadius(50 * asteroidSize);
+		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&smallTex);
 	}
 	if (asteroidSize == 2)
 	{
-		m_shape.setRadius(50 * asteroidSize);
+		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&mediumTex);
+<<<<<<< HEAD
+=======
+				//m_shape.setTexture(&smallTex);
+
+>>>>>>> parent of 799546d (elliot karp)
 	}
 	if (asteroidSize == 3)
 	{
-		m_shape.setRadius(50 * asteroidSize);
+		m_shape.setRadius(50*asteroidSize);
 		m_shape.setTexture(&largeTex);
+
 	}
 
+<<<<<<< HEAD
 	m_shape.setOrigin(m_shape.getRadius(), m_shape.getRadius());
+=======
+
+	m_shape.setOrigin(50*asteroidSize , 50*asteroidSize);
+	//cout << "asteroid spawned in at " << position.x << " " << position.y << endl;
+>>>>>>> parent of 799546d (elliot karp)
 	setRotation(); //sets the rotation to a random value
 }
 void Asteroid::setPosition(sf::Vector2f position)
@@ -221,7 +232,20 @@ void Asteroid::setRotation()
 	angle = angle * (180.0f / 3.14159265358979f);
 	m_shape.setRotation(angle);
 }
+<<<<<<< HEAD
 
+=======
+void Asteroid::setNewRotation(float x)
+{
+	this->m_shape.setRotation(x);
+}
+void Asteroid::setTexture(sf::Texture& texture){
+	m_shape.setTexture(&texture);
+}
+float Asteroid::getCurRotation(){
+	return AsteroidRotation;
+}
+>>>>>>> parent of 799546d (elliot karp)
 void Asteroid::move(float time)
 {
 
